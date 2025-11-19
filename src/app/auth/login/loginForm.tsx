@@ -1,8 +1,10 @@
 'use client'
 import React, { useState } from 'react';
+import {useRouter} from "next/navigation";
 
 const LoginForm = () => {
     const [alertMessage, setAlertMessage] = useState('');
+    const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -28,6 +30,7 @@ const LoginForm = () => {
             );
         }
         setAlertMessage('');
+        return router.push('/auth/mypage');
     };
 
     return (

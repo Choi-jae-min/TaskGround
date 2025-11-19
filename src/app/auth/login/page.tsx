@@ -3,7 +3,7 @@ import LoginForm from "@/app/auth/login/loginForm";
 
 const Page = () => {
     return (
-        <div className="min-h-screen flex items-center justify-center  bg-[#f7f7f8] px-4">
+        <div className="min-h-screen flex items-center justify-center px-4">
             <div className="w-full max-w-sm bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
 
                 <div className="text-center mb-8">
