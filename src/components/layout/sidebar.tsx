@@ -16,7 +16,7 @@ export default function Sidebar() {
     ];
 
     return (
-        <aside className="hidden md:flex w-64 bg-white border-r border-gray-200 min-h-screen flex-col">
+        <aside className="hidden md:flex w-64 bg-[#202020] border-r border-r-[#2a2a2a] text-white border-gray-200 min-h-screen flex-col">
             <div className="p-4 font-bold text-lg">Workspace {workspaceId}</div>
 
             <nav className="mt-4 flex-1">
@@ -26,7 +26,7 @@ export default function Sidebar() {
                         <Link key={item.href} href={item.href}>
                             <div
                                 className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition 
-                ${active ? "bg-blue-100 font-medium" : "hover:bg-blue-50"}`}
+                ${active ? "bg-gray-500 font-medium" : "hover:bg-gray-600"}`}
                             >
                                 {item.icon}
                                 {item.name}

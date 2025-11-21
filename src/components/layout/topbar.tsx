@@ -41,11 +41,11 @@ export default function Topbar() {
     }, [wsOpen]);
 
     return (
-        <header className="h-14 border-b bg-white flex items-center justify-between px-4 md:px-6 relative">
+        <header className="h-14 border-b border-b-[#2a2a2a] bg-[#202020] flex items-center justify-between px-4 md:px-6 relative">
             <button
                 ref={wsButtonRef}
                 onClick={() => setWsOpen((prev) => !prev)}
-                className="flex items-center gap-1 font-medium hover:bg-gray-100 px-3 py-1 rounded-md transition text-sm md:text-base"
+                className="flex items-center gap-1 font-medium hover:bg-[#2a2a2a] px-3 py-1 rounded-md transition text-sm md:text-base"
             >
                 현재 워크스페이스 : {workspaceId}
             </button>
@@ -103,28 +103,30 @@ export default function Topbar() {
                 <div
                     ref={wsDropdownRef}
                     className="
-            absolute top-16 left-4 md:left-6 bg-white shadow-md border rounded-md w-56
+            absolute top-16 left-4 md:left-6 text-white bg-[#202020] shadow-md border rounded-md w-56
             animate-[slideDown_0.2s_ease-out]
           "
                 >
                     <div className="p-2 border-b text-gray-500 text-sm">워크스페이스 전환</div>
 
                     <Link href={`/workspace/1`} onClick={() => setWsOpen(false)}>
-                        <div className="w-full text-left px-3 py-2 hover:bg-gray-50">
+                        <div className="w-full text-left px-3 py-2 hover:bg-[#2a2a2a]">
                             워크스페이스 1
                         </div>
                     </Link>
 
                     <Link href={`/workspace/2`} onClick={() => setWsOpen(false)}>
-                        <div className="w-full text-left px-3 py-2 hover:bg-gray-50">
+                        <div className="w-full text-left px-3 py-2 hover:bg-[#2a2a2a]">
                             워크스페이스 2
                         </div>
                     </Link>
 
                     <div className="border-t mt-2">
-                        <button className="w-full text-left text-blue-600 px-3 py-2 hover:bg-blue-50">
-                            + 새 워크스페이스 생성
-                        </button>
+                        <Link href={`/workspace/register`}>
+                            <div className="w-full text-left text-blue-600 px-3 py-2 hover:bg-[#2a2a2a]">
+                                + 새 워크스페이스 생성
+                            </div>
+                        </Link>
                     </div>
                 </div>
             )}
