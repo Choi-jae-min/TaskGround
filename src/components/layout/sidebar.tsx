@@ -16,7 +16,7 @@ export default function Sidebar() {
     ];
 
     return (
-        <aside className="hidden md:flex w-64 bg-[#202020] border-r border-r-[#2a2a2a] text-white border-gray-200 min-h-screen flex-col">
+        <aside className="hidden md:flex w-64 bg-[#202020] border-r border-r-[#2a2a2a] text-white border-gray-200 h-screen flex-col">
             <div className="p-4 font-bold text-lg">Workspace {workspaceId}</div>
 
             <nav className="mt-4 flex-1">

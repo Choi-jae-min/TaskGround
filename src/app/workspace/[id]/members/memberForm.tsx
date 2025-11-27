@@ -121,17 +121,17 @@ const MemberForm = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="rounded-lg bg-[#243040] p-4">
+                <div className="rounded-lg border-slate-800 bg-slate-900/70 p-4">
                     <p className="text-xs">전체 멤버</p>
                     <p className="mt-1 text-xl font-semibold">{members.length}명</p>
                 </div>
-                <div className="rounded-lg  bg-[#243040] p-4">
+                <div className="rounded-lg border-slate-800 bg-slate-900/70 p-4">
                     <p className="text-xs">초대중</p>
                     <p className="mt-1 text-xl font-semibold">
                         {members.filter((m) => m.status === "INVITED").length}명
                     </p>
                 </div>
-                <div className="rounded-lg bg-[#243040] p-4">
+                <div className="rounded-lg border-slate-800 bg-slate-900/70 p-4">
                     <p className="text-xs">관리 권한 (Owner + Admin)</p>
                     <p className="mt-1 text-xl font-semibold">
                         {members.filter((m) => m.role === "OWNER" || m.role === "ADMIN").length}명
@@ -140,8 +140,8 @@ const MemberForm = () => {
             </div>
 
             {/* 멤버 리스트 테이블 */}
-            <div className="border rounded-lg bg-[#243040] overflow-hidden">
-                <div className="flex items-center justify-between px-4 py-2 border-b">
+            <div className="border rounded-lg border-slate-800 bg-slate-900/70 overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-2 border-b border-slate-800">
                     <p className="text-sm font-medium ">멤버 리스트</p>
                     <TextInput
                         placeholder="이름 / 이메일 검색"
@@ -156,13 +156,13 @@ const MemberForm = () => {
                 </div>
 
                 {filteredMembers.length === 0 ? (
-                    <div className="p-6 text-sm text-gray-500">
+                    <div className="p-6 text-sm text-slate-300">
                         검색 결과가 없습니다. 다른 키워드로 검색해보세요.
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="min-w-full text-sm">
-                            <thead className="border-b">
+                            <thead className="border-b border-slate-800">
                             <tr>
                                 <th className="px-4 py-2 text-left font-medium ">
                                     멤버
@@ -182,15 +182,14 @@ const MemberForm = () => {
                             </thead>
                             <tbody>
                             {filteredMembers.map((member) => (
-                                <tr key={member.id} className="border-b last:border-0">
-                                    {/* 멤버 이름 */}
+                                <tr key={member.id} className="border-b border-slate-800 last:border-0">
                                     <td className="px-4 py-3 align-middle">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold">
+                                            <div className="w-6 h-6 text-black rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold">
                                                 {member.name.charAt(0)}
                                             </div>
                                             <div>
-                                                <p className="font-medium ">
+                                                <p className="font-medium">
                                                     {member.name}
                                                 </p>
                                                 {member.role === "OWNER" && (

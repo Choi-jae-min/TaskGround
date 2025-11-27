@@ -1,12 +1,10 @@
 import React from 'react';
+import WorkSpaceForm from "@/app/workspace/[id]/workSpaceForm";
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params;
-
+export default function Page() {
     return (
         <div>
-            <h1 className="text-2xl font-bold">워크스페이스 대시보드</h1>
-            <p className="mt-2 text-gray-600">현재 workspace ID: {id}</p>
+            <WorkSpaceForm/>
         </div>
     );
 }
