@@ -8,7 +8,7 @@ export default function Sidebar() {
     const pathname = usePathname();
     const params = useParams<{ id?: string }>();
     const workspaceId = params.id;
-
+    const currentMenu = pathname.includes('members') ? "member": pathname.includes('settings') ? 'setting':'workspace'
     const NAV = [
         { name: "대시보드", href: `/workspace/${workspaceId}`, icon: <Home size={18} /> },
         { name: "멤버", href: `/workspace/${workspaceId}/members`, icon: <Users size={18} /> },
@@ -17,7 +17,7 @@ export default function Sidebar() {
 
     return (
         <aside className="hidden md:flex w-64 bg-[#202020] border-r border-r-[#2a2a2a] text-white border-gray-200 h-screen flex-col">
-            <div className="p-4 font-bold text-lg">Workspace {workspaceId}</div>
+            <div className="p-4 font-bold text-lg">{currentMenu}</div>
 
             <nav className="mt-4 flex-1">
                 {NAV.map((item) => {
