@@ -16,11 +16,12 @@ const LoginForm = () => {
             return setAlertMessage('이메일과 비밀번호를 정확히 입력해주세요.');
         }
 
-        const res = await fetch('/api/login', {
+        const res = await fetch(`${process.env.WORKSPACE_SERVER_URL}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify({email,password}),
         })
         if (!res.ok) {

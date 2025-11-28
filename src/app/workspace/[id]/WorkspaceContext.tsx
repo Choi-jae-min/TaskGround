@@ -9,7 +9,11 @@ export type Workspace = {
     ownerId: string;
     createdAt: string;
     updatedAt: string;
-    projects: never[];
+    projects: {
+        id : string;
+        name: string;
+        createdAt:string;
+    }[];
 };
 
 const WorkspaceContext = createContext<Workspace | null>(null);
