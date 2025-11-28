@@ -13,6 +13,7 @@ const SignUpPage = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        console.log('??')
         const formData = new FormData(e.currentTarget);
         const email = formData.get('email');
         const password = formData.get('password');
@@ -27,7 +28,7 @@ const SignUpPage = () => {
             return setAlertMessage('모든 항목을 입력해주세요.');
         }
 
-        const res = await fetch(`${process.env.WORKSPACE_SERVER_URL}/signUp`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_WORKSPACE_SERVER_URL}/signUp`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

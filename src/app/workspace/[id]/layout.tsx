@@ -6,7 +6,7 @@ import WorkSpaceHeader from "@/components/headers/workSpaceHeader";
 export default async function WorkspaceLayout({children,params}: { children: React.ReactNode; params: { id: string }; }) {
     const { id } = await params;
 
-    const getWorkSpaceRes = await fetch(`${process.env.WORKSPACE_SERVER_URL}/workspace/${id}`)
+    const getWorkSpaceRes = await fetch(`${process.env.NEXT_PUBLIC_WORKSPACE_SERVER_URL}/workspace/${id}`)
     if (!getWorkSpaceRes.ok) {
         return (
             <div className="min-h-screen bg-slate-950 text-slate-50 flex items-center justify-center">

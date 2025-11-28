@@ -15,8 +15,7 @@ const LoginForm = () => {
         if (!email || !password) {
             return setAlertMessage('이메일과 비밀번호를 정확히 입력해주세요.');
         }
-
-        const res = await fetch(`${process.env.WORKSPACE_SERVER_URL}/login`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_WORKSPACE_SERVER_URL}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
