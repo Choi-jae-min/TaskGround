@@ -2,6 +2,7 @@
 import React from 'react';
 import {useWorkspace} from "@/app/workspace/[id]/WorkspaceContext";
 import {formatDate} from "@/utility/utility";
+import ProjectCard from "@/components/cards/projectCard";
 
 const WorkSpaceForm = () => {
     const workspace = useWorkspace();
@@ -45,7 +46,7 @@ const WorkSpaceForm = () => {
                         </button>
                     </div>
 
-                    {projectCount === 0 ? (
+                    {projectCount !== 0 ? (
                         <div className="mt-4 rounded-2xl border border-dashed border-slate-800 bg-slate-900/40 px-6 py-10 text-center">
                             <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900">
                                 <span className="text-lg">📂</span>
@@ -62,22 +63,10 @@ const WorkSpaceForm = () => {
                         </div>
                     ) : (
                         <div className="mt-4 grid gap-4 md:grid-cols-2">
-                            {workspace.projects.map((project) => (
-                                <div
-                                    key={project.id}
-                                    className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 hover:border-emerald-500/70 hover:bg-slate-900 transition"
-                                >
-                                    <h3 className="text-sm font-semibold text-slate-50">
-                                        {project.name}
-                                    </h3>
-                                    <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500">
-                                        <span>생성: {project.createdAt && formatDate(project.createdAt)}</span>
-                                        <button className="rounded-lg bg-slate-800/80 px-2 py-1 text-[11px] text-slate-100 hover:bg-slate-700">
-                                            상세 보기
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
+                            {/*{workspace.projects.map((project) => (*/}
+                            <ProjectCard name="Project A" />
+                            <ProjectCard name="Project A" />
+                             {/*))}*/}
                         </div>
                     )}
                 </section>
