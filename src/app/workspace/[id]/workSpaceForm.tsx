@@ -21,10 +21,7 @@ const WorkSpaceForm = () => {
 
                     <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 shadow-sm">
                         <p className="text-xs text-slate-400">소유자</p>
-                        <p className="mt-2 font-mono text-sm">{workspace.ownerId}</p>
-                        <p className="mt-1 text-xs text-slate-500">
-                            추후 유저 정보와 연결해서 표시할 수 있어요.
-                        </p>
+                        <p className="font-mono text-xl pt-4 font-bold">{workspace.ownerName}</p>
                     </div>
 
                     <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 shadow-sm">
@@ -46,7 +43,7 @@ const WorkSpaceForm = () => {
                         </button>
                     </div>
 
-                    {projectCount !== 0 ? (
+                    {projectCount === 0 ? (
                         <div className="mt-4 rounded-2xl border border-dashed border-slate-800 bg-slate-900/40 px-6 py-10 text-center">
                             <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-900">
                                 <span className="text-lg">📂</span>
@@ -63,10 +60,11 @@ const WorkSpaceForm = () => {
                         </div>
                     ) : (
                         <div className="mt-4 grid gap-4 md:grid-cols-2">
-                            {/*{workspace.projects.map((project) => (*/}
-                            <ProjectCard name="Project A" />
-                            <ProjectCard name="Project A" />
-                             {/*))}*/}
+                            {workspace.projects.map((project) => (
+                                <div key={project.id}>
+                                    <ProjectCard name={project.name} createdAt={project.createdAt} />
+                                </div>
+                             ))}
                         </div>
                     )}
                 </section>

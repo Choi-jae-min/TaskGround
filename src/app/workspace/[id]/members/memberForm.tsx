@@ -1,50 +1,20 @@
 'use client'
-import React, {useState} from 'react';
+import React, {FC, useState} from 'react';
 import {Badge, Button, Modal, Select, TextInput} from "@mantine/core";
-
-type Role = "OWNER" | "ADMIN" | "MEMBER";
-type Status = "ACTIVE" | "INVITED";
-
-interface Member {
-    id: string;
-    name: string;
-    email: string;
-    role: Role;
-    status: Status;
-}
-
-const initialMembers: Member[] = [
-    {
-        id: "1",
-        name: "홍길동",
-        email: "owner@test.com",
-        role: "OWNER",
-        status: "ACTIVE",
-    },
-    {
-        id: "2",
-        name: "김개발",
-        email: "dev1@test.com",
-        role: "ADMIN",
-        status: "ACTIVE",
-    },
-    {
-        id: "3",
-        name: "이디자이너",
-        email: "design@test.com",
-        role: "MEMBER",
-        status: "INVITED",
-    },
-];
+import {Member, Role, useWorkspace} from "@/app/workspace/[id]/WorkspaceContext";
 
 const roleOptions = [
-    { value: "OWNER", label: "Owner" },
     { value: "ADMIN", label: "Admin" },
     { value: "MEMBER", label: "Member" },
+    { value: "GUEST", label: "Guest" },
 ];
 
-const MemberForm = () => {
-    const [members, setMembers] = useState<Member[]>(initialMembers);
+interface memberProps{
+    memberList : Member[]
+}
+
+const MemberForm:FC<memberProps> = ({memberList}) => {
+    const [members, setMembers] = useState<Member[]>(memberList || []);
     const [search, setSearch] = useState("");
     const [inviteModalOpen, setInviteModalOpen] = useState(false);
     const [inviteEmail, setInviteEmail] = useState("");
@@ -54,26 +24,24 @@ const MemberForm = () => {
         const keyword = search.trim().toLowerCase();
         if (!keyword) return true;
         return (
-            m.name.toLowerCase().includes(keyword) ||
-            m.email.toLowerCase().includes(keyword)
+            m.user.name.toLowerCase().includes(keyword) ||
+            m.user.email.toLowerCase().includes(keyword)
         );
     });
 
     const handleRoleChange = (id: string, nextRole: Role | null) => {
-        if (!nextRole) return;
-
-        // role update api 통신 작성
-
-        setMembers((prev) =>
-            prev.map((m) =>
-                m.id === id
-                    ? {
-                        ...m,
-                        role: m.role === "OWNER" ? "OWNER" : nextRole,
-                    }
-                    : m,
-            ),
-        );
+        // if (!nextRole) return;
+        //
+        // setMembers((prev) =>
+        //     prev.map((m) =>
+        //         m.id === id
+        //             ? {
+        //                 ...m,
+        //                 role: m.role === "OWNER" ? "OWNER" : nextRole,
+        //             }
+        //             : m,
+        //     ),
+        // );
     };
 
     const handleRemove = (id: string) => {
@@ -82,20 +50,20 @@ const MemberForm = () => {
     };
 
     const handleInvite = () => {
-        if (!inviteEmail.trim()) return;
-
-        const newMember: Member = {
-            id: String(Date.now()),
-            name: inviteEmail.split("@")[0],
-            email: inviteEmail.trim(),
-            role: inviteRole,
-            status: "INVITED",
-        };
-
-        setMembers((prev) => [...prev, newMember]);
-        setInviteEmail("");
-        setInviteRole("MEMBER");
-        setInviteModalOpen(false);
+        // if (!inviteEmail.trim()) return;
+        //
+        // const newMember: Member = {
+        //     id: String(Date.now()),
+        //     name: inviteEmail.split("@")[0],
+        //     email: inviteEmail.trim(),
+        //     role: inviteRole,
+        //     status: "INVITED",
+        // };
+        //
+        // setMembers((prev) => [...prev, newMember]);
+        // setInviteEmail("");
+        // setInviteRole("MEMBER");
+        // setInviteModalOpen(false);
     };
     return (
         <div className={'space-y-6 pt-6'}>
@@ -132,9 +100,9 @@ const MemberForm = () => {
                     </p>
                 </div>
                 <div className="rounded-lg border-slate-800 bg-slate-900/70 p-4">
-                    <p className="text-xs">관리 권한 (Owner + Admin)</p>
+                    <p className="text-xs">관리 권한 (Admin)</p>
                     <p className="mt-1 text-xl font-semibold">
-                        {members.filter((m) => m.role === "OWNER" || m.role === "ADMIN").length}명
+                        {members.filter((m) => m.role === "ADMIN").length}명
                     </p>
                 </div>
             </div>
@@ -186,41 +154,30 @@ const MemberForm = () => {
                                     <td className="px-4 py-3 align-middle">
                                         <div className="flex items-center gap-3">
                                             <div className="w-6 h-6 text-black rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold">
-                                                {member.name.charAt(0)}
+                                                {member.user.name?.charAt(0)}
                                             </div>
                                             <div>
                                                 <p className="font-medium">
-                                                    {member.name}
+                                                    {member.user.name}
                                                 </p>
-                                                {member.role === "OWNER" && (
-                                                    <p className="text-[11px] ">
-                                                        워크스페이스 소유자
-                                                    </p>
-                                                )}
                                             </div>
                                         </div>
                                     </td>
 
                                     <td className="px-4 py-3 align-middle">
-                                        {member.email}
+                                        {member.user.email}
                                     </td>
 
                                     <td className="px-4 py-3 align-middle">
-                                        {member.role === "OWNER" ? (
-                                            <Badge color="grape" variant="light" size="sm">
-                                                Owner
-                                            </Badge>
-                                        ) : (
-                                            <Select
-                                                data={roleOptions.filter((r) => r.value !== "OWNER")}
-                                                value={member.role}
-                                                onChange={(value) =>
-                                                    handleRoleChange(member.id, value as Role)
-                                                }
-                                                size="xs"
-                                                className="max-w-[140px]"
-                                            />
-                                        )}
+                                        <Select
+                                            data={roleOptions}
+                                            value={member.role}
+                                            onChange={(value) =>
+                                                handleRoleChange(member.id, value as Role)
+                                            }
+                                            size="xs"
+                                            className="max-w-[140px]"
+                                        />
                                     </td>
 
                                     <td className="px-4 py-3 align-middle">
@@ -248,16 +205,14 @@ const MemberForm = () => {
                                                     초대 다시 보내기
                                                 </Button>
                                             )}
-                                            {member.role !== "OWNER" && (
-                                                <Button
-                                                    color="red"
-                                                    variant="subtle"
-                                                    size="xs"
-                                                    onClick={() => handleRemove(member.id)}
-                                                >
-                                                    제거
-                                                </Button>
-                                            )}
+                                            <Button
+                                                color="red"
+                                                variant="subtle"
+                                                size="xs"
+                                                onClick={() => handleRemove(member.id)}
+                                            >
+                                                제거
+                                            </Button>
                                         </div>
                                     </td>
                                 </tr>

@@ -2,13 +2,30 @@
 
 import { createContext, useContext } from "react";
 
+export type Role = "ADMIN" | "MEMBER" | "GUEST";
+export type Status = "ACTIVE" | "INVITED" | "KICKED";
+
+export interface Member {
+    id: string;
+    name: string;
+    email: string;
+    role: Role;
+    status: Status;
+    user : {
+        name : string;
+        email : string;
+    }
+}
+
 export type Workspace = {
     id: string;
     name: string;
     description: string;
     ownerId: string;
+    ownerName : string;
     createdAt: string;
     updatedAt: string;
+    members : Member[];
     projects: {
         id : string;
         name: string;
