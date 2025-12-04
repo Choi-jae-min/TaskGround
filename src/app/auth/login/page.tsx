@@ -19,7 +19,7 @@ const Page = () => {
 
                 <div className="text-center text-sm text-gray-500 mt-6">
                     계정이 없나요?{" "}
-                    <a href="/signup" className="text-black font-medium underline">
+                    <a href="/auth/signup" className="text-black font-medium underline">
                         회원가입
                     </a>
                 </div>

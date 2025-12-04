@@ -13,7 +13,6 @@ const SignUpPage = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log('??')
         const formData = new FormData(e.currentTarget);
         const email = formData.get('email');
         const password = formData.get('password');
@@ -38,12 +37,12 @@ const SignUpPage = () => {
         });
 
         const data = await res.json().catch(() => ({}));
-
-        if (!res.ok || !data.ok) {
-            return setAlertMessage(data.message || '회원가입에 실패했습니다.');
+        if (!res.ok) {
+            return setAlertMessage(data.error || '회원가입에 실패했습니다.');
         }
 
         setAlertMessage('');
+        alert('회원가입이 완료되었습니다');
         return router.push('/auth/login');
     };
 
