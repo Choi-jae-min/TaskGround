@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { ArrowRight } from "lucide-react";
 
 interface ProjectCardProps {
     name: string;
@@ -14,11 +13,8 @@ interface ProjectCardProps {
 
 const ProjectCard = ({
                          name,
-                         description,
                          color = "#8B5CF6",
-                         updatedAt = "",
                          createdAt,
-                         onClick,
                      }: ProjectCardProps) => {
     return (
         <div>

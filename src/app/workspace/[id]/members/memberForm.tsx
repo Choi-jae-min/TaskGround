@@ -1,7 +1,7 @@
 'use client'
 import React, {FC, useState} from 'react';
 import {Badge, Button, Modal, Select, TextInput} from "@mantine/core";
-import {Member, Role, useWorkspace} from "@/app/workspace/[id]/WorkspaceContext";
+import {Member, Role} from "@/app/workspace/[id]/WorkspaceContext";
 
 const roleOptions = [
     { value: "ADMIN", label: "Admin" },
