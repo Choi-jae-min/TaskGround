@@ -4,6 +4,7 @@ import {Badge, Button, Modal, Select, TextInput} from "@mantine/core";
 import {Member, Role} from "@/app/workspace/[id]/WorkspaceContext";
 
 const roleOptions = [
+    { value: "OWNER", label: "Owner" },
     { value: "ADMIN", label: "Admin" },
     { value: "MEMBER", label: "Member" },
     { value: "GUEST", label: "Guest" },
