@@ -8,3 +8,39 @@ export function formatDate(iso: string) {
         minute: "2-digit",
     });
 }
+
+export function moreLightenColor(hex: string, percent: number) {
+    hex = hex.replace(/^#/, '');
+
+    const num = parseInt(hex, 16);
+    const r = (num >> 16) + Math.round(2.55 * percent);
+    const g = ((num >> 8) & 0x00ff) + Math.round(2.55 * percent);
+    const b = (num & 0x0000ff) + Math.round(2.55 * percent);
+
+    const clamp = (v: number) => Math.max(0, Math.min(255, v));
+
+    return (
+        "#" +
+        (clamp(r) << 16 | clamp(g) << 8 | clamp(b))
+            .toString(16)
+            .padStart(6, "0")
+    );
+}
+
+export function moreDarkenColor(hex: string, percent: number) {
+    hex = hex.replace(/^#/, '');
+
+    const num = parseInt(hex, 16);
+    const r = (num >> 16) - Math.round(2.55 * percent);
+    const g = ((num >> 8) & 0x00ff) - Math.round(2.55 * percent);
+    const b = (num & 0x0000ff) - Math.round(2.55 * percent);
+
+    const clamp = (v: number) => Math.max(0, Math.min(255, v));
+
+    return (
+        "#" +
+        (clamp(r) << 16 | clamp(g) << 8 | clamp(b))
+            .toString(16)
+            .padStart(6, "0")
+    );
+}
