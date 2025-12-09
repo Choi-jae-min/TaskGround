@@ -1,4 +1,5 @@
-import React from "react";
+'use client'
+import React, {useState} from "react";
 import { Plus } from "lucide-react";
 import BoardComponent from "@/app/project/[id]/boardComponent";
 import {BoardColumn} from "@/components/cards/taskCard";
@@ -69,7 +70,7 @@ const mockBoards: BoardColumn[] = [
     {
         id: "in-progress",
         name: "진행 중",
-        color: "#4e7e67",
+        color: "#263861",
         tasks: [
             {
                 id: "t3",
@@ -124,10 +125,41 @@ const mockBoards: BoardColumn[] = [
 
 
 export default function ProjectPage() {
+    const [boards, setBoards] = useState<BoardColumn[]>(mockBoards);
+
+    const moveTask = (taskId: string, fromBoardId: string, toBoardId: string,toIndex?: number) => {
+        if (fromBoardId === toBoardId) return;
+
+        setBoards((prev) => {
+            const next = prev.map((b) => ({ ...b, tasks: [...b.tasks] }));
+
+            const fromBoard = next.find((b) => b.id === fromBoardId);
+            const toBoard = next.find((b) => b.id === toBoardId);
+            if (!fromBoard || !toBoard) return prev;
+
+            const fromIndex = fromBoard.tasks.findIndex((t) => t.id === taskId);
+            if (fromIndex === -1) return prev;
+
+            const [task] = fromBoard.tasks.splice(fromIndex, 1);
+
+            if (fromBoardId === toBoardId) {
+                const insertIndex =
+                    typeof toIndex === "number" ? toIndex : toBoard.tasks.length;
+                toBoard.tasks.splice(insertIndex, 0, task);
+            } else {
+                const insertIndex =
+                    typeof toIndex === "number" ? toIndex : toBoard.tasks.length;
+                toBoard.tasks.splice(insertIndex, 0, task);
+            }
+
+            return next;
+        });
+    };
+
     return (
         <div className={'flex w-full flex-1 gap-4 p-4'}>
-            {mockBoards.map((board) => (
-                <BoardComponent key={board.id} board={board} />
+            {boards.map((board) => (
+                <BoardComponent key={board.id} board={board} onDropTask={moveTask} />
             ))}
 
             <button className="flex-shrink-0 w-64 h-48 border border-dashed border-slate-800 rounded-xl flex items-center justify-center text-xs text-white hover:border-slate-700">
