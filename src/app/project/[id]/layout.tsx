@@ -3,7 +3,7 @@ import Sidebar from "@/components/layout/sidebar";
 import ProjectHeader from "@/components/headers/projectHeader";
 
 export default async function ProjectLayout({children,params}: { children: React.ReactNode; params: { id: string }; }) {
-    const id = await params.id
+    const { id } = await params;
     console.log(id)
     return (
         <div className="flex h-screen bg-slate-950 text-white">
