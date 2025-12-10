@@ -23,7 +23,7 @@ const TaskCard: React.FC<{ task: Task, color : string ,boardId:string}> = ({ tas
     const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
         e.dataTransfer.setData(
             "application/json",
-            JSON.stringify({ taskId: task.id, fromBoardId: boardId, task : task })
+            JSON.stringify({ taskId: task.id, fromBoardId: boardId })
         );
         e.dataTransfer.effectAllowed = "move";
 
@@ -45,8 +45,6 @@ const TaskCard: React.FC<{ task: Task, color : string ,boardId:string}> = ({ tas
     };
 
     const handleDragEnd = () => {
-        // board 에서 해당 카드 제거하고
-        // 추가하는 board 에서 해당 카드 넣어야함.
         setIsDragging(false);
     };
 
