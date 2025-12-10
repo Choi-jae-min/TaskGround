@@ -1,13 +1,15 @@
 'use client'
-import React from 'react';
+import React, {useState} from 'react';
 import {Plus} from "lucide-react";
 import TaskCard, {BoardColumn} from "@/components/cards/taskCard";
 import {moreDarkenColor, moreLightenColor} from "@/utility/utility";
 
-const BoardComponent:React.FC<{ board: BoardColumn , onDropTask : (taskId: string, fromBoardId: string, toBoardId: string ,toIndex?:number) => void;}> = ({ board ,onDropTask}) => {
+const BoardComponent:React.FC<{ board: BoardColumn}> = ({ board}) => {
+    const [taskId , setTaskId] = useState<string | "END" |null>(null);
 
-    const handleDrop = (e: React.DragEvent<HTMLDivElement>,targetIndex : number) => {
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
+        setTaskId(null)
         const raw = e.dataTransfer.getData("application/json");
         if (!raw) return;
 
@@ -15,16 +17,17 @@ const BoardComponent:React.FC<{ board: BoardColumn , onDropTask : (taskId: strin
             const { taskId, fromBoardId } = JSON.parse(raw);
             if (!taskId || !fromBoardId) return;
 
-            onDropTask(taskId, fromBoardId, board.id , targetIndex);
+
+
         } catch {
         }
     };
+
     return (
-        <div style={{
-            backgroundColor : board.color
-        }} className="flex-shrink-0 w-72 rounded-xl flex flex-col p-2"
+        <div style={{backgroundColor : board.color}} className="flex-shrink-0 w-72 rounded-xl flex flex-col p-2"
              onDragOver={(e) => e.preventDefault()}
-             onDrop={(e) => handleDrop(e, board.tasks.length)}
+             onDrop={(e) => handleDrop(e)}
+             onDragLeave={() => {setTaskId(null)}}
         >
             <div style={{
                 backgroundColor : moreDarkenColor(board.color , 5)
@@ -39,13 +42,18 @@ const BoardComponent:React.FC<{ board: BoardColumn , onDropTask : (taskId: strin
                 </span>
             </div>
 
-            <div className="pt-2 space-y-2 min-h-[40px]">
-                {board.tasks.map((task, index) => (
+            <div
+                className="pt-2 space-y-2 min-h-[40px]">
+                {board.tasks.map((task) => (
                     <div
                         key={task.id}
-                        onDragOver={(e) => e.preventDefault()}
-                        onDrop={(e) => handleDrop(e, index)}
+                        onDragOver={(e) => {
+                            e.preventDefault();
+                            setTaskId(task.id);
+                        }}
+                        onDrop={(e) => handleDrop(e)}
                     >
+                        {task.id === taskId && <div className="h-10 rounded-lg border-2 border-dashed border-white/40 my-1" />}
                         <TaskCard
                             task={task}
                             color={moreLightenColor(board.color, 10)}
@@ -53,20 +61,23 @@ const BoardComponent:React.FC<{ board: BoardColumn , onDropTask : (taskId: strin
                         />
                     </div>
                 ))}
-
-                <div
-                    className="h-4"
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={(e) => handleDrop(e, board.tasks.length)}
-                />
             </div>
+            <div
+                onDragOver={(e) => {
+                    e.preventDefault();
+                    setTaskId("END");
+                }}
+                onDrop={handleDrop}
+            >
+                {taskId === "END" && <div className="h-10 rounded-lg border-2 border-dashed border-white/40 my-1" />}
 
-            <button style={{
-                borderColor : moreLightenColor(board.color , 10),
-            }} className={`border border-dashed cursor-pointer hover:backdrop-brightness-110 mt-2 inline-flex items-center justify-center gap-1 rounded-lg p-2 text-[11px] text-white transition`}>
-                <Plus size={14} />
-                새 카드 추가
-            </button>
+                <button style={{
+                    borderColor : moreLightenColor(board.color , 10),
+                }} className={`w-full mt-2 border border-dashed cursor-pointer hover:backdrop-brightness-110 inline-flex items-center justify-center gap-1 rounded-lg p-2 text-[11px] text-white transition`}>
+                    <Plus size={14} />
+                    새 카드 추가
+                </button>
+            </div>
         </div>
     );
 };

@@ -35,6 +35,8 @@ const TaskCard: React.FC<{ task: Task, color : string ,boardId:string}> = ({ tas
         ghost.style.opacity = "0.7";
         document.body.appendChild(ghost);
         e.dataTransfer.setDragImage(ghost, ghost.offsetWidth / 2, ghost.offsetHeight / 2);
+
+        //dom 성능 저하방지를 위해 제거.
         setTimeout(() => {
             document.body.removeChild(ghost);
         }, 0);
@@ -43,6 +45,8 @@ const TaskCard: React.FC<{ task: Task, color : string ,boardId:string}> = ({ tas
     };
 
     const handleDragEnd = () => {
+        // board 에서 해당 카드 제거하고
+        // 추가하는 board 에서 해당 카드 넣어야함.
         setIsDragging(false);
     };
 
