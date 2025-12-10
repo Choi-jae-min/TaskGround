@@ -23,7 +23,7 @@ const TaskCard: React.FC<{ task: Task, color : string ,boardId:string}> = ({ tas
     const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
         e.dataTransfer.setData(
             "application/json",
-            JSON.stringify({ taskId: task.id, fromBoardId: boardId })
+            JSON.stringify({ taskId: task.id, fromBoardId: boardId, task : task })
         );
         e.dataTransfer.effectAllowed = "move";
 
