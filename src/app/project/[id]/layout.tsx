@@ -27,8 +27,8 @@ export default async function ProjectLayout({children,params}: { children: React
             <div className="flex h-screen bg-slate-950 text-white">
                 <Sidebar />
                 <div className="flex flex-1 flex-col min-w-0">
-                    <div className="flex-none px-6 pt-6 pb-4 border-b border-slate-800">
-                        <ProjectHeader />
+                    <div className="flex-none px-6 py-6 border-b border-slate-800">
+                        <ProjectHeader name={project.name} />
                     </div>
 
                     <main className="flex-1 overflow-auto mr-4">
