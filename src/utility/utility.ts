@@ -1,4 +1,3 @@
-import {ColorEnum} from "@/enums";
 
 export function formatDate(iso: string) {
     return new Date(iso).toLocaleString("ko-KR", {
@@ -11,9 +10,15 @@ export function formatDate(iso: string) {
     });
 }
 
-export function setThemeColor (color_name : ColorEnum) {
+export function setThemeColor (color_name : string) {
     switch (color_name.toUpperCase()){
-        case "RED" : return "#f65c5c";
+        case "RED" : return "#e15353";
+        case "BLUE" : return "#537be1";
+        case "GREEN" : return "#53e15f";
+        case "PURPLE" : return "#9c53e1";
+        case "YELLOW" : return "#e1d553";
+        case "BROWN" : return "#8a4545";
+        case "ORANGE" : return "#dd855f";
 
         default : return "#686868";
     }

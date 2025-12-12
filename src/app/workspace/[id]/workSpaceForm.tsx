@@ -3,6 +3,7 @@ import React from 'react';
 import {useWorkspace} from "@/app/workspace/[id]/WorkspaceContext";
 import {formatDate} from "@/utility/utility";
 import ProjectCard from "@/components/cards/projectCard";
+import Link from "next/link";
 
 const WorkSpaceForm = () => {
     const workspace = useWorkspace();
@@ -61,9 +62,9 @@ const WorkSpaceForm = () => {
                     ) : (
                         <div className="mt-4 grid gap-4 md:grid-cols-2">
                             {workspace.projects.map((project) => (
-                                <div key={project.id}>
+                                <Link href={`/project/${project.id}`} key={project.id}>
                                     <ProjectCard name={project.name} createdAt={project.createdAt} />
-                                </div>
+                                </Link>
                              ))}
                         </div>
                     )}
