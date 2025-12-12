@@ -1,5 +1,6 @@
 'use client'
 import React, {useState} from 'react';
+import {formatDate} from "@/utility/utility";
 
 type Task = {
     id: string;
@@ -14,7 +15,7 @@ export type BoardColumn = {
     id: string;
     name: string;
     color: string;
-    tasks: Task[];
+    task: Task[];
 };
 
 const TaskCard: React.FC<{ task: Task, color : string ,boardId:string}> = ({ task , color, boardId }) => {
@@ -36,7 +37,6 @@ const TaskCard: React.FC<{ task: Task, color : string ,boardId:string}> = ({ tas
         document.body.appendChild(ghost);
         e.dataTransfer.setDragImage(ghost, ghost.offsetWidth / 2, ghost.offsetHeight / 2);
 
-        //dom 성능 저하방지를 위해 제거.
         setTimeout(() => {
             document.body.removeChild(ghost);
         }, 0);
@@ -79,7 +79,7 @@ const TaskCard: React.FC<{ task: Task, color : string ,boardId:string}> = ({ tas
                     )}
                     {task.dueDate && (
                         <span className="inline-flex items-center rounded-full bg-red-50 px-2 py-0.5 text-[10px] text-red-500">
-              {task.dueDate}
+              {formatDate(task.dueDate)}
             </span>
                     )}
                 </div>

@@ -43,13 +43,13 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
                 />
                 <p className="text-xs font-semibold text-white">{board.name}</p>
                 <span className="text-[11px] text-gray-300">
-                    {board.tasks.length}
+                    {board.task.length}
                 </span>
             </div>
 
             <div
                 className="pt-2 space-y-2 min-h-[20px]">
-                {board.tasks.map((task) => (
+                {board.task.map((task) => (
                     <div
                         key={task.id}
                         onDragOver={(e) => {
