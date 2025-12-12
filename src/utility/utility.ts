@@ -1,3 +1,5 @@
+import {ColorEnum} from "@/enums";
+
 export function formatDate(iso: string) {
     return new Date(iso).toLocaleString("ko-KR", {
         timeZone: "Asia/Seoul",
@@ -7,6 +9,14 @@ export function formatDate(iso: string) {
         hour: "2-digit",
         minute: "2-digit",
     });
+}
+
+export function setThemeColor (color_name : ColorEnum) {
+    switch (color_name.toUpperCase()){
+        case "RED" : return "#f65c5c";
+
+        default : return "#686868";
+    }
 }
 
 export function moreLightenColor(hex: string, percent: number) {
