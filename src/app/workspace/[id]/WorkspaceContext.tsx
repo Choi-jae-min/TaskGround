@@ -29,6 +29,7 @@ export type Workspace = {
     projects: {
         id : string;
         name: string;
+        description : string;
         createdAt:string;
     }[];
 };
