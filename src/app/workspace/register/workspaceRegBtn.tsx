@@ -38,7 +38,6 @@ const WorkspaceRegBtn:FC<Props> = ({className}) => {
 
         if(res.ok){
             const resJson = await res.json()
-            console.log('resJson :' , resJson)
             closeCreateModal();
             return router.push(`/workspace/${resJson.id}`)
         }
