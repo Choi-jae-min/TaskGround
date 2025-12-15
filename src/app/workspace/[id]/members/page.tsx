@@ -6,7 +6,6 @@ export default async function MembersPage({params}: { params: { id: string }}) {
     const getmemberListRes = await fetch(`${process.env.NEXT_PUBLIC_WORKSPACE_SERVER_URL}/member/workspace/${id}`)
     if (getmemberListRes.ok) {
         const memberList = await getmemberListRes.json();
-        console.log(memberList)
         return (
             <div className={'min-h-screen bg-slate-950 p-6 rounded-xl'}>
                 <h1 className="text-2xl font-bold">멤버 관리</h1>

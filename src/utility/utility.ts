@@ -13,14 +13,14 @@ export function formatDate(iso: string) {
 export function setThemeColor (color_name : string) {
     switch (color_name.toUpperCase()){
         case "RED" : return "#e15353";
-        case "BLUE" : return "#537be1";
-        case "GREEN" : return "#53e15f";
-        case "PURPLE" : return "#9c53e1";
-        case "YELLOW" : return "#e1d553";
+        case "BLUE" : return "#6084df";
+        case "GREEN" : return "#157855";
+        case "PURPLE" : return "#634080";
+        case "YELLOW" : return "#363327";
         case "BROWN" : return "#8a4545";
-        case "ORANGE" : return "#dd855f";
+        case "ORANGE" : return "#df5216";
 
-        default : return "#686868";
+        default : return "#3a3939";
     }
 }
 

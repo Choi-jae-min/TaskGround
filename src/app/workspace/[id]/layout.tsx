@@ -20,7 +20,6 @@ export default async function WorkspaceLayout({children,params}: { children: Rea
     })
     const workspace = await getWorkSpaceRes.json()
 
-    console.log(workspace)
     if (!getWorkSpaceRes.ok) {
         return (
             <div className="min-h-screen bg-slate-950 text-slate-50 flex items-center justify-center">
