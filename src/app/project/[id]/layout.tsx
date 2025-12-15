@@ -28,7 +28,7 @@ export default async function ProjectLayout({children,params}: { children: React
                 <Sidebar />
                 <div className="flex flex-1 flex-col min-w-0">
                     <div className="flex-none px-6 py-6 border-b border-slate-800">
-                        <ProjectHeader name={project.name} />
+                        <ProjectHeader name={project.name} description={project.description}/>
                     </div>
 
                     <main className="flex-1 overflow-auto mr-4">

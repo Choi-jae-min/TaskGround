@@ -13,6 +13,7 @@ interface ProjectCardProps {
 
 const ProjectCard = ({
                          name,
+                         description,
                          color = "#8B5CF6",
                          createdAt,
                      }: ProjectCardProps) => {
@@ -29,10 +30,14 @@ const ProjectCard = ({
                         {name.charAt(0).toUpperCase()}
                     </div>
 
-                    <h3 className="text-lg font-semibold text-slate-50">
-                        {name}
-                    </h3>
+                    <div className={'flex flex-col'}>
+                        <h3 className="text-lg font-semibold text-slate-50">
+                            {name}
+                        </h3>
+                        <p className={'text-gray-400 text-12'}>{description || ''}</p>
+                    </div>
                 </div>
+
                 <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500">
                     <span>생성:{createdAt}</span>
                     <button className="rounded-lg bg-slate-800/80 px-2 py-1 text-[11px] text-slate-100 hover:bg-slate-700">

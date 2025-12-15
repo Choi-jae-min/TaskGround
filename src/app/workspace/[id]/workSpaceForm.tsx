@@ -4,9 +4,11 @@ import {useWorkspace} from "@/app/workspace/[id]/WorkspaceContext";
 import {formatDate} from "@/utility/utility";
 import ProjectCard from "@/components/cards/projectCard";
 import Link from "next/link";
+import ProjectRegisterBtn from "@/app/project/register/projectRegisterBtn";
 
 const WorkSpaceForm = () => {
     const workspace = useWorkspace();
+
     const projectCount = workspace.projects?.length ?? 0;
     return (
         <div>
@@ -35,13 +37,11 @@ const WorkSpaceForm = () => {
                     </div>
                 </section>
 
-                {/* 프로젝트 리스트 영역 */}
                 <section className="mt-2">
                     <div className="flex items-center justify-between">
                         <h2 className="text-sm font-semibold text-slate-100">프로젝트</h2>
-                        <button className="rounded-lg border border-slate-800 bg-slate-900/60 px-3 py-1.5 text-xs text-slate-200 hover:border-slate-600 hover:bg-slate-900 transition">
-                            프로젝트 추가
-                        </button>
+
+                        <ProjectRegisterBtn workspaceId={workspace.id}/>
                     </div>
 
                     {projectCount === 0 ? (
@@ -52,24 +52,25 @@ const WorkSpaceForm = () => {
                             <p className="text-sm font-medium text-slate-100">
                                 아직 등록된 프로젝트가 없어요.
                             </p>
-                            <p className="mt-1 text-xs text-slate-400">
+                            <p className="mt-1 mb-2 text-xs text-slate-400">
                                 새 프로젝트를 만들어 워크스페이스에서 작업을 시작해보세요.
                             </p>
-                            <button className="mt-4 rounded-xl bg-emerald-500 px-4 py-2 text-xs font-semibold text-slate-950 hover:bg-emerald-400 transition">
-                                첫 프로젝트 만들기
-                            </button>
+
+                            <ProjectRegisterBtn workspaceId={workspace.id}/>
                         </div>
                     ) : (
                         <div className="mt-4 grid gap-4 md:grid-cols-2">
                             {workspace.projects.map((project) => (
                                 <Link href={`/project/${project.id}`} key={project.id}>
-                                    <ProjectCard name={project.name} createdAt={project.createdAt} />
+                                    <ProjectCard name={project.name} description={project.description} createdAt={project.createdAt} />
                                 </Link>
                              ))}
                         </div>
                     )}
                 </section>
             </div>
+
+
         </div>
     );
 };
