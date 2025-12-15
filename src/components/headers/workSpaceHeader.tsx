@@ -3,6 +3,8 @@ import React from 'react';
 import {formatDate} from "@/utility/utility";
 import {Workspace} from "@/app/workspace/[id]/WorkspaceContext";
 import ProjectRegisterBtn from "@/app/project/register/projectRegisterBtn";
+import Link from "next/link";
+import WorkspaceRegBtn from "@/app/workspace/register/workspaceRegBtn";
 
 interface Props{
     workspace : Workspace
@@ -41,6 +43,8 @@ const WorkSpaceHeader = ({ workspace }: Props) => {
                     <button className="rounded-xl border border-slate-700 bg-slate-900/70 px-4 py-2 text-sm font-medium text-slate-100 hover:border-slate-500 hover:bg-slate-900 transition">
                         워크스페이스 설정
                     </button>
+
+                    <WorkspaceRegBtn/>
                 </div>
             </div>
         </header>

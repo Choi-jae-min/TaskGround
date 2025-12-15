@@ -3,7 +3,8 @@
 import Link from "next/link";
 import {useParams, usePathname, useRouter} from "next/navigation";
 import { Home, Users, Settings, UserRound, ChevronDown } from "lucide-react";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
+import WorkspaceRegBtn from "@/app/workspace/register/workspaceRegBtn";
 
 export default function Sidebar() {
     const router = useRouter();
@@ -73,6 +74,7 @@ export default function Sidebar() {
                                 </button>
                             );
                     })}
+                    <WorkspaceRegBtn className={'w-full pt-2'}/>
                 </div>
             )}
 
