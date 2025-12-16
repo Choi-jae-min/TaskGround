@@ -1,12 +1,29 @@
 'use client'
 import React, {useState} from 'react';
 import {Plus} from "lucide-react";
-import TaskCard, {BoardColumn} from "@/components/cards/taskCard";
+import TaskCard, {BoardColumn, Task} from "@/components/cards/taskCard";
 import {moreDarkenColor, moreLightenColor} from "@/utility/utility";
+import CardDetailSidePeek from '@/components/cards/cardDetailSidePeek';
 
 const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoardId :string,toBoardId :string, taskId:string, index : string) => void}> = ({ board,handleBoardData}) => {
+    const [task , setTask] = useState(board.task || [])
     const [taskHoverId , setTaskHoverId] = useState<string | "END" |null>(null);
     const [toBoardId , setToBoardId] = useState<string | null>(null);
+
+    const [opened, setOpened] = useState(false);
+    const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+
+    const updateTask = (field: "title" | "description" | "tag" | "dueDate" | "assignee", value: string) => {
+        setTask((prevState) => {
+            if (!selectedTask) return prevState;
+
+            return prevState.map((task) =>
+                task.id === selectedTask.id
+                    ? { ...task, [field]: value }
+                    : task
+            );
+        });
+    };
 
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
@@ -49,8 +66,12 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
 
             <div
                 className="pt-2 space-y-2 min-h-[20px]">
-                {board.task && board.task.map((task) => (
+                {task && task.map((task) => (
                     <div
+                        onClick={() => {
+                            setSelectedTask(task);
+                            setOpened(true);
+                        }}
                         key={task.id}
                         onDragOver={(e) => {
                             e.preventDefault();
@@ -81,6 +102,15 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
                     새 카드 추가
                 </button>
             </div>
+
+            <CardDetailSidePeek
+                opened={opened}
+                onClose={() => setOpened(false)}
+                task={selectedTask!}
+                boardName={board.name}
+                setTask={setSelectedTask}
+                updateTask={updateTask}
+            />
         </div>
     );
 };

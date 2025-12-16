@@ -2,7 +2,7 @@
 import React, {useState} from 'react';
 import {formatDate} from "@/utility/utility";
 
-type Task = {
+export type Task = {
     id: string;
     title: string;
     description?: string;
@@ -65,7 +65,7 @@ const TaskCard: React.FC<{ task: Task, color : string ,boardId:string}> = ({ tas
             </div>
 
             {task.description && (
-                <p className="text-[11px] text-gray-300 line-clamp-2">
+                <p className="text-[11px] text-gray-300 truncate">
                     {task.description}
                 </p>
             )}
