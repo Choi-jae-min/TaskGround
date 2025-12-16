@@ -53,15 +53,15 @@ export default function ProjectPage() {
             credentials: 'include',
             body: JSON.stringify({name : newBoardName,color : colorName, projectId : project.id}),
         })
-        console.log('res' ,res)
 
         if(res.ok){
             const resJson = await res.json();
-            return setBoardData((prevState) => {
-                console.log('prevState' ,prevState)
-                console.log('resJson' ,resJson)
+            setBoardData((prevState) => {
                 return [...prevState , resJson];
             })
+            setNewBoardName('')
+            setColorName("DEFAULT")
+            return setShowBoardInput(false)
         }
         return alert('보드 생성 실패하였습니다 잠시 후 다시 시도해주세요.')
     }
