@@ -95,7 +95,9 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
             >
                 {taskHoverId === "END" && <div className="h-10 rounded-lg border-2 border-dashed border-white/40 my-1" />}
 
-                <button style={{
+                <button
+                    onClick={() => {setOpened(!opened)}}
+                    style={{
                     borderColor : moreLightenColor(board.color , 10),
                 }} className={`w-full mt-2 border border-dashed cursor-pointer hover:backdrop-brightness-110 inline-flex items-center justify-center gap-1 rounded-lg p-2 text-[11px] text-white transition`}>
                     <Plus size={14} />
