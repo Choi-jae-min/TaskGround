@@ -1,13 +1,14 @@
 "use client";
-import React from "react";
+import React, {useState} from "react";
 import {
     Drawer,
     Select,
     Badge,
-    Group, ScrollArea, Stack, Textarea, Text,Divider
+    Group,Divider
 } from "@mantine/core";
 import {Task} from "@/components/cards/taskCard";
 import {formatDate} from "@/utility/utility";
+import Block from "../block";
 
 interface CardDetailSidePeekProps {
     opened: boolean;
@@ -25,7 +26,16 @@ const tagOptions = [
     { value: "review", label: "Review" },
 ];
 
+const initBlock = {
+    id : 'b1',
+    html : '<b>Hello <i>World</i></b>',
+    tag : 'p',
+    flag : 0
+}
+
 export default function CardDetailSidePeek({opened, onClose, task, setTask, boardName ,updateTask}: CardDetailSidePeekProps) {
+    const [blocks,setBlocks] = useState([initBlock]);
+
     return (
         <Drawer
             className={'text-white'}
@@ -99,23 +109,7 @@ export default function CardDetailSidePeek({opened, onClose, task, setTask, boar
             </span>
 
             <Divider my="sm" label="Description" labelPosition="left" />
-
-            <div>
-                <Text size="xs" c="dimmed">
-                    내용 (Markdown 지원)
-                </Text>
-                <textarea
-                    className={'focus:outline-none resize-none min-h-[80px] w-full'}
-                    placeholder="여기에 마크다운 형식으로 내용을 작성하세요.&#10;예) ## 제목, - 리스트, ```코드``` 등"
-                    value={task?.description}
-                    onChange={(e) => {
-                        e.target.style.height = "auto";
-                        e.target.style.height = `${e.target.scrollHeight}px`;
-                        setTask({...task , description : e.target.value})
-                        updateTask('description' , e.target.value);
-                    }}
-                />
-            </div>
+            <Block/>
         </Drawer>
     );
 }

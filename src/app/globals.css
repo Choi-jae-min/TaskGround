@@ -46,6 +46,18 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.editable[contenteditable="true"]:empty:before {
+  content: attr(placeholder);
+  color: #cdcdcd;
+  pointer-events: none;
+}
+
+.editable[contenteditable="true"]:focus:empty:before {
+  content: attr(placeholder);
+  color: #cdcdcd;
+  pointer-events: none;
+}
+
 @keyframes slideDown {
   0% {
     opacity: 0;
