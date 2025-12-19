@@ -148,7 +148,7 @@ const Block = () => {
                             handleChange(value, index);
                         }}
                         onChange={(e) => {
-                            if(isComposing) return;
+                            if(isComposing.current) return;
                             const value = e.currentTarget.innerHTML;
                             handleChange(value, index);
                         }}
