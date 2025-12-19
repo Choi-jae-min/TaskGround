@@ -1,9 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Container } from "@mantine/core";
 import ContentEditable from "react-contenteditable";
 import {focusBlock, getCaretOffsetInElement, hasSelection} from "@/utility/utility";
+import {History} from "@/hooks/history";
 
-const initBlock = {
+type IBlocks = {
+    id : string,
+    html : string,
+    tag : string,
+    flag : number
+}
+
+const initBlock:IBlocks = {
     id: "b1",
     html: "<b>Hello <i>World</i></b>",
     tag: "p",
@@ -11,9 +19,10 @@ const initBlock = {
 };
 
 const Block = () => {
+    const history = useRef(new History<IBlocks[]>({ limit: 50 })).current;
+    const isComposing = useRef(false);
     const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
-    const [blocks, setBlocks] = useState([initBlock]);
-
+    const [blocks, setBlocks] = useState<IBlocks[]>([initBlock]);
     const handleChange = (value: string, index: number) => {
         setBlocks((prevState) => {
             const next = [...prevState];
@@ -23,6 +32,7 @@ const Block = () => {
             };
             return next;
         });
+        history.push(structuredClone(blocks));
     };
     const addBlockAfter= (index : number) =>{
         setBlocks((prev) => {
@@ -61,7 +71,24 @@ const Block = () => {
     };
 
     const handleKeyDown = (event:React.KeyboardEvent<HTMLDivElement> , index : number) => {
-        if(event.key === 'Enter'){
+        const isMac = navigator.platform.toUpperCase().includes("MAC");
+        const modKey = isMac ? event.metaKey : event.ctrlKey;
+        const isUndo = modKey && event.key.toLowerCase() === "z" && !event.shiftKey;
+        const isRedo =
+            (modKey && event.key.toLowerCase() === "z" && event.shiftKey) ||
+            (!isMac && modKey && event.key.toLowerCase() === "y");
+
+        if(isUndo && history.canUndo()){
+            event.preventDefault();
+            const res = history.undo(blocks)
+            return setBlocks(res!)
+        }
+        if(isRedo && history.canRedo()){
+            event.preventDefault();
+            const res = history.redo(blocks)
+            return setBlocks(res!)
+        }
+        if(event.key === 'Enter' && !event.nativeEvent.isComposing){
             if (event.shiftKey) {
                 return;
             }
@@ -109,16 +136,25 @@ const Block = () => {
 
     return (
         <Container>
-            {blocks.map(({ id, html, tag, flag }, index) => (
+            {blocks.map(({ id, html }, index) => (
                 <div key={id} style={{ marginBottom: 8 }}>
                     <ContentEditable
-                        className={'editable focus:outline-none'}
-                        placeholder={`${index === blocks.length -1 ? '내용을 입력하세요..' : ''}`}
-                        html={html}
-                        onChange={(event) => {
-                            const value = event.currentTarget.innerHTML;
+                        onCompositionStart={() => {
+                            isComposing.current = true;
+                        }}
+                        onCompositionEnd={(e: { currentTarget: { innerHTML: never; }; }) => {
+                            isComposing.current = false;
+                            const value = e.currentTarget.innerHTML;
                             handleChange(value, index);
                         }}
+                        onChange={(e) => {
+                            if(isComposing) return;
+                            const value = e.currentTarget.innerHTML;
+                            handleChange(value, index);
+                        }}
+                        className={'editable focus:outline-none border-b'}
+                        placeholder={`${index === blocks.length -1 ? '내용을 입력하세요..' : ''}`}
+                        html={html}
                         onKeyDown={(e:React.KeyboardEvent<HTMLDivElement>) => handleKeyDown(e, index)}
                         innerRef={(el: HTMLDivElement) => {
                             blockRefs.current[index] = el;
