@@ -13,7 +13,7 @@ type IBlocks = {
 
 const initBlock:IBlocks = {
     id: "b1",
-    html: "<b>Hello <i>World</i></b>",
+    html: "<b>Hello <i>World hi</i></b>",
     tag: "p",
     flag: 0,
 };
