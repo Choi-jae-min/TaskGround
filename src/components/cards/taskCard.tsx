@@ -10,7 +10,6 @@ export type Task = {
     tag?: string;
     assignee?: string;
     dueDate?: string;
-    block?:IBlocks[];
 };
 
 export type BoardColumn = {

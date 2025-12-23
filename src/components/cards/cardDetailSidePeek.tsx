@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {
     Drawer,
     Select,
@@ -8,14 +8,14 @@ import {
 } from "@mantine/core";
 import {Task} from "@/components/cards/taskCard";
 import {formatDate} from "@/utility/utility";
-import Block from "../block";
+import Block, {IBlocks} from "../block";
+import {History} from "@/hooks/history";
 
 interface CardDetailSidePeekProps {
     opened: boolean;
     onClose: () => void;
     task: Task;
     updateTask : (id:string ,field: "title" | "description" | "tag" | "dueDate" | "assignee", value: string) => void;
-    updateBlocks : (id : string, value : string) => void;
     boardName :string;
 }
 
@@ -26,7 +26,69 @@ const tagOptions = [
     { value: "review", label: "Review" },
 ];
 
-export default function CardDetailSidePeek({opened, onClose, task, boardName ,updateTask , updateBlocks}: CardDetailSidePeekProps) {
+const initBlock : IBlocks ={
+    id: "b1",
+    html : '',
+}
+
+export default function CardDetailSidePeek({opened, onClose, task, boardName ,updateTask}: CardDetailSidePeekProps) {
+    const history = useRef(new History<IBlocks[]>({ limit: 50 })).current;
+
+    useEffect(() => {
+        // block 리스트 조회
+    }, []);
+    const [blocks, setBlocks] = useState<IBlocks[]>([initBlock]);
+    const handleChange = (value: string, id: string) => {
+        setBlocks((prev) => {
+            const next = prev.map((block) =>
+                block.id === id
+                    ? { ...block, html: value === "<br>" ? "" : value }
+                    : block
+            );
+            history.push(structuredClone(next));
+            return next;
+        });
+    };
+
+
+    const addBlockAfter= (index : number) =>{
+        setBlocks((prev) => {
+            const next = [...prev];
+            const newBlock = {
+                id: `b`+ Math.random() * Math.random(),
+                html: "",
+                tag: "p",
+                flag: 0,
+            };
+            next.splice(index + 1, 0, newBlock);
+            return next;
+        });
+    }
+
+    const deleteBlockCurr = (index : number) => {
+        setBlocks((prev) => {
+            const next = [...prev];
+            next.splice(index,1);
+            return next;
+        });
+    }
+    const deleteBlockCurrPushToPrevEl = (index: number) => {
+        setBlocks((prev) => {
+            if (index <= 0) return prev;
+            const next = prev.map((b) => ({ ...b }));
+            const curr = next[index];
+            const prevBlock = next[index - 1];
+
+            if (curr.html && curr.html.trim() !== "") {
+                prevBlock.html = prevBlock.html + curr.html;
+            }
+
+            next.splice(index, 1);
+            return next;
+        });
+    };
+
+
     return (
         <Drawer
             className={'text-white'}
@@ -97,7 +159,14 @@ export default function CardDetailSidePeek({opened, onClose, task, boardName ,up
             </span>
 
             <Divider my="sm" label="Description" labelPosition="left" />
-            <Block Blocks={task?.block} updateBlocks={updateBlocks}/>
+            <Block
+                history={history}
+                blocks={blocks}
+                setBlocks={setBlocks}
+                handleChange={handleChange}
+                addBlockAfter={addBlockAfter}
+                deleteBlockCurr={deleteBlockCurr}
+                deleteBlockCurrPushToPrevEl={deleteBlockCurrPushToPrevEl}/>
         </Drawer>
     );
 }
