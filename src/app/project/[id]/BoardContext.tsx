@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext } from "react";
+import {IBlocks} from "@/components/block";
 export type Project = {
     id: string;
     name: string;
@@ -16,6 +17,7 @@ export type Project = {
             assignee : string
             tag ?: string
             dueDate : string
+            blocks ? :IBlocks[]
         }[]
     }[],
 };

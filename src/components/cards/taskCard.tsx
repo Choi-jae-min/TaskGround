@@ -1,6 +1,7 @@
 'use client'
 import React, {useState} from 'react';
 import {formatDate} from "@/utility/utility";
+import {IBlocks} from "@/components/block";
 
 export type Task = {
     id: string;
@@ -9,6 +10,7 @@ export type Task = {
     tag?: string;
     assignee?: string;
     dueDate?: string;
+    block?:IBlocks[];
 };
 
 export type BoardColumn = {
@@ -61,12 +63,12 @@ const TaskCard: React.FC<{ task: Task, color : string ,boardId:string}> = ({ tas
         ${isDragging ? "opacity-40 scale-[0.98]" : "opacity-100"}
       `}>
             <div className="flex items-start justify-between gap-2">
-                <p className="font-medium text-white text-[13px]">{task.title}</p>
+                <p className="font-medium text-white text-[13px]">{task.title || ""}</p>
             </div>
 
             {task.description && (
                 <p className="text-[11px] text-gray-300 truncate">
-                    {task.description}
+                    {task.description || ''}
                 </p>
             )}
 
