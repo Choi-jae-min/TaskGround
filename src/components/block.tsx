@@ -7,68 +7,21 @@ import {History} from "@/hooks/history";
 export type IBlocks = {
     id : string,
     html : string,
-    tag : string,
-    flag : number
 }
 
 interface Props {
-    Blocks?: IBlocks[]
-    updateBlocks : (id : string, value : string) => void;
+    blocks: IBlocks[]
+    history : History<IBlocks[]>,
+    setBlocks : (blocks : IBlocks[]) => void
+    handleChange : (value: string, id: string) => void;
+    addBlockAfter : (index : number) => void;
+    deleteBlockCurr : (index : number) => void
+    deleteBlockCurrPushToPrevEl : (index : number) => void
 }
 
-const Block:FC<Props> = ({Blocks ,updateBlocks}) => {
-    const history = useRef(new History<IBlocks[]>({ limit: 50 })).current;
+const Block:FC<Props> = ({history,blocks,setBlocks, handleChange,addBlockAfter ,deleteBlockCurr ,deleteBlockCurrPushToPrevEl}) => {
     const isComposing = useRef(false);
     const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
-    const [blocks, setBlocks] = useState<IBlocks[]>(Blocks || []);
-    const handleChange = (value: string, id: string) => {
-        setBlocks((prevState) => {
-            const next = [...prevState];
-            prevState.map((block) =>
-                block.id === id
-                    ? { ...block, html: value === '<br>' ? "" : value }
-                    : block
-            );
-            history.push(structuredClone(next));
-            updateBlocks(id,value)
-            return next;
-        });
-    };
-    const addBlockAfter= (index : number) =>{
-        setBlocks((prev) => {
-            const next = [...prev];
-            const newBlock = {
-                id: `b`+ Math.random() * Math.random(),
-                html: "",
-                tag: "p",
-                flag: 0,
-            };
-            next.splice(index + 1, 0, newBlock);
-            return next;
-        });
-    }
-    const deleteBlockCurr = (index : number) => {
-        setBlocks((prev) => {
-            const next = [...prev];
-            next.splice(index,1);
-            return next;
-        });
-    }
-    const deleteBlockCurrPushToPrevEl = (index: number) => {
-        setBlocks((prev) => {
-            if (index <= 0) return prev;
-            const next = prev.map((b) => ({ ...b }));
-            const curr = next[index];
-            const prevBlock = next[index - 1];
-
-            if (curr.html && curr.html.trim() !== "") {
-                prevBlock.html = prevBlock.html + curr.html;
-            }
-
-            next.splice(index, 1);
-            return next;
-        });
-    };
 
     const handleKeyDown = (event:React.KeyboardEvent<HTMLDivElement> , index : number) => {
         const isMac = navigator.platform.toUpperCase().includes("MAC");

@@ -4,14 +4,6 @@ import {Plus} from "lucide-react";
 import TaskCard, {BoardColumn, Task} from "@/components/cards/taskCard";
 import {moreDarkenColor, moreLightenColor} from "@/utility/utility";
 import CardDetailSidePeek from '@/components/cards/cardDetailSidePeek';
-import {IBlocks} from "@/components/block";
-
-const initBlock : IBlocks ={
-    id: "b1",
-    html : '',
-    flag : 0,
-    tag : ''
-}
 
 const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoardId :string,toBoardId :string, taskId:string, index : string) => void}> = ({ board,handleBoardData}) => {
     const [task , setTask] = useState(board.task || [])
@@ -19,9 +11,6 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
     const [toBoardId , setToBoardId] = useState<string | null>(null);
     const [opened, setOpened] = useState(false);
     const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-    const updateBlocks = (id : string, value : string) => {
-
-    }
 
     const addEmptyTask = () => {
         setTask((prevState) => {
@@ -33,9 +22,7 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
                 tag: '',
                 assignee: '',
                 dueDate: '',
-                block : [initBlock]
             }
-            console.log('addTask' ,addTask)
             next.push(addTask)
             setSelectedTask(addTask)
             return next
@@ -44,7 +31,6 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
     const updateTask = (id : string,field: "title" | "description" | "tag" | "dueDate" | "assignee", value: string) => {
         setTask((prevState) => {
             if (!id) return prevState;
-            console.log('id' ,id)
             return prevState.map((task) =>
                 task.id === id
                     ? { ...task, [field]: value }
@@ -144,10 +130,8 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
                 opened={opened}
                 onClose={() => setOpened(false)}
                 task={selectedTask!}
-
                 boardName={board.name}
                 updateTask={updateTask}
-                updateBlocks={updateBlocks}
             />
         </div>
     );
