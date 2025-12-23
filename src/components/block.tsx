@@ -1,36 +1,36 @@
-import React, { useRef, useState } from "react";
+import React, {FC, useRef, useState} from "react";
 import { Container } from "@mantine/core";
 import ContentEditable from "react-contenteditable";
 import {focusBlock, getCaretOffsetInElement, hasSelection} from "@/utility/utility";
 import {History} from "@/hooks/history";
 
-type IBlocks = {
+export type IBlocks = {
     id : string,
     html : string,
     tag : string,
     flag : number
 }
 
-const initBlock:IBlocks = {
-    id: "b1",
-    html: "<b>Hello <i>World hi</i></b>",
-    tag: "p",
-    flag: 0,
-};
+interface Props {
+    Blocks?: IBlocks[]
+    updateBlocks : (id : string, value : string) => void;
+}
 
-const Block = () => {
+const Block:FC<Props> = ({Blocks ,updateBlocks}) => {
     const history = useRef(new History<IBlocks[]>({ limit: 50 })).current;
     const isComposing = useRef(false);
     const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
-    const [blocks, setBlocks] = useState<IBlocks[]>([initBlock]);
-    const handleChange = (value: string, index: number) => {
+    const [blocks, setBlocks] = useState<IBlocks[]>(Blocks || []);
+    const handleChange = (value: string, id: string) => {
         setBlocks((prevState) => {
             const next = [...prevState];
-            next[index] = {
-                ...next[index],
-                html: value === '<br>' ? "" : value,
-            };
+            prevState.map((block) =>
+                block.id === id
+                    ? { ...block, html: value === '<br>' ? "" : value }
+                    : block
+            );
             history.push(structuredClone(next));
+            updateBlocks(id,value)
             return next;
         });
     };
@@ -145,12 +145,12 @@ const Block = () => {
                         onCompositionEnd={(e: { currentTarget: { innerHTML: never; }; }) => {
                             isComposing.current = false;
                             const value = e.currentTarget.innerHTML;
-                            handleChange(value, index);
+                            handleChange(value, id);
                         }}
                         onChange={(e) => {
                             if(isComposing.current) return;
                             const value = e.currentTarget.innerHTML;
-                            handleChange(value, index);
+                            handleChange(value, id);
                         }}
                         className={'editable focus:outline-none border-b'}
                         placeholder={`${index === blocks.length -1 ? '내용을 입력하세요..' : ''}`}

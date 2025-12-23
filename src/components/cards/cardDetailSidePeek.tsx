@@ -1,5 +1,5 @@
 "use client";
-import React, {useState} from "react";
+import React from "react";
 import {
     Drawer,
     Select,
@@ -14,8 +14,8 @@ interface CardDetailSidePeekProps {
     opened: boolean;
     onClose: () => void;
     task: Task;
-    setTask: (task :Task) => void;
-    updateTask : (field: "title" | "description" | "tag" | "dueDate" | "assignee", value: string) => void;
+    updateTask : (id:string ,field: "title" | "description" | "tag" | "dueDate" | "assignee", value: string) => void;
+    updateBlocks : (id : string, value : string) => void;
     boardName :string;
 }
 
@@ -26,16 +26,7 @@ const tagOptions = [
     { value: "review", label: "Review" },
 ];
 
-const initBlock = {
-    id : 'b1',
-    html : '<b>Hello <i>World</i></b>',
-    tag : 'p',
-    flag : 0
-}
-
-export default function CardDetailSidePeek({opened, onClose, task, setTask, boardName ,updateTask}: CardDetailSidePeekProps) {
-    const [blocks,setBlocks] = useState([initBlock]);
-
+export default function CardDetailSidePeek({opened, onClose, task, boardName ,updateTask , updateBlocks}: CardDetailSidePeekProps) {
     return (
         <Drawer
             className={'text-white'}
@@ -70,10 +61,9 @@ export default function CardDetailSidePeek({opened, onClose, task, setTask, boar
                 <input
                     className={'focus:outline-none w-full py-2 mt-1'}
                     placeholder="카드 제목을 입력하세요"
-                    value={task?.title}
+                    value={task?.title || ''}
                     onChange={(e) => {
-                        setTask({...task , title : e.target.value})
-                        updateTask('title' , e.target.value);
+                        updateTask(task.id ,'title' , e.target.value);
                     }}
                 ></input>
             </div>
@@ -83,8 +73,7 @@ export default function CardDetailSidePeek({opened, onClose, task, setTask, boar
                     data={tagOptions}
                     value={task?.tag}
                     onChange={(value) => {
-                        setTask({...task , tag : value || task.tag})
-                        updateTask('tag' , value || '');
+                        updateTask(task.id ,'tag' , value || '');
                     }}
                     size="xs"
                 />
@@ -96,8 +85,7 @@ export default function CardDetailSidePeek({opened, onClose, task, setTask, boar
                     data={tagOptions}
                     value={task?.tag}
                     onChange={(value) => {
-                        setTask({...task , tag : value || task.tag})
-                        updateTask('tag' , value || '');
+                        updateTask(task.id ,'tag' , value || '');
                     }}
                     size="xs"
                 />
@@ -109,7 +97,7 @@ export default function CardDetailSidePeek({opened, onClose, task, setTask, boar
             </span>
 
             <Divider my="sm" label="Description" labelPosition="left" />
-            <Block/>
+            <Block Blocks={task?.block} updateBlocks={updateBlocks}/>
         </Drawer>
     );
 }

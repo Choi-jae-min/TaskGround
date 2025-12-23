@@ -4,25 +4,57 @@ import {Plus} from "lucide-react";
 import TaskCard, {BoardColumn, Task} from "@/components/cards/taskCard";
 import {moreDarkenColor, moreLightenColor} from "@/utility/utility";
 import CardDetailSidePeek from '@/components/cards/cardDetailSidePeek';
+import {IBlocks} from "@/components/block";
+
+const initBlock : IBlocks ={
+    id: "b1",
+    html : '',
+    flag : 0,
+    tag : ''
+}
 
 const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoardId :string,toBoardId :string, taskId:string, index : string) => void}> = ({ board,handleBoardData}) => {
     const [task , setTask] = useState(board.task || [])
     const [taskHoverId , setTaskHoverId] = useState<string | "END" |null>(null);
     const [toBoardId , setToBoardId] = useState<string | null>(null);
-
     const [opened, setOpened] = useState(false);
     const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+    const updateBlocks = (id : string, value : string) => {
 
-    const updateTask = (field: "title" | "description" | "tag" | "dueDate" | "assignee", value: string) => {
+    }
+
+    const addEmptyTask = () => {
         setTask((prevState) => {
-            if (!selectedTask) return prevState;
-
+            const next = [...prevState];
+            const addTask:Task = {
+                id: `t`+ Math.random() * Math.random(),
+                title: '',
+                description: '',
+                tag: '',
+                assignee: '',
+                dueDate: '',
+                block : [initBlock]
+            }
+            console.log('addTask' ,addTask)
+            next.push(addTask)
+            setSelectedTask(addTask)
+            return next
+        })
+    }
+    const updateTask = (id : string,field: "title" | "description" | "tag" | "dueDate" | "assignee", value: string) => {
+        setTask((prevState) => {
+            if (!id) return prevState;
+            console.log('id' ,id)
             return prevState.map((task) =>
-                task.id === selectedTask.id
+                task.id === id
                     ? { ...task, [field]: value }
                     : task
             );
         });
+
+        setSelectedTask(prev =>
+            prev && prev.id === id ? { ...prev, [field]: value } : prev
+        );
     };
 
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -96,7 +128,10 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
                 {taskHoverId === "END" && <div className="h-10 rounded-lg border-2 border-dashed border-white/40 my-1" />}
 
                 <button
-                    onClick={() => {setOpened(!opened)}}
+                    onClick={() => {
+                        addEmptyTask()
+                        setOpened(!opened)}
+                }
                     style={{
                     borderColor : moreLightenColor(board.color , 10),
                 }} className={`w-full mt-2 border border-dashed cursor-pointer hover:backdrop-brightness-110 inline-flex items-center justify-center gap-1 rounded-lg p-2 text-[11px] text-white transition`}>
@@ -109,9 +144,10 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
                 opened={opened}
                 onClose={() => setOpened(false)}
                 task={selectedTask!}
+
                 boardName={board.name}
-                setTask={setSelectedTask}
                 updateTask={updateTask}
+                updateBlocks={updateBlocks}
             />
         </div>
     );
