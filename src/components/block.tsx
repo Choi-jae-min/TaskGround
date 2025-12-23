@@ -28,11 +28,11 @@ const Block = () => {
             const next = [...prevState];
             next[index] = {
                 ...next[index],
-                html: value,
+                html: value === '<br>' ? "" : value,
             };
+            history.push(structuredClone(next));
             return next;
         });
-        history.push(structuredClone(blocks));
     };
     const addBlockAfter= (index : number) =>{
         setBlocks((prev) => {
