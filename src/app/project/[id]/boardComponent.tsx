@@ -12,34 +12,70 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
     const [opened, setOpened] = useState(false);
     const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
-    const addEmptyTask = () => {
+    const addEmptyTask = async () => {
+        const date = new Date()
+        const addRes = await fetch(`${process.env.NEXT_PUBLIC_WORKSPACE_SERVER_URL}/task`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                title: "",
+                description: "",
+                assignee: "",
+                tag: "",
+                boardId: board.id,
+                dueDate: date
+            }),
+        })
+        if(!addRes.ok){
+            return alert('에러')
+        }
+        const resJson = await addRes.json()
         setTask((prevState) => {
             const next = [...prevState];
             const addTask:Task = {
-                id: `t`+ Math.random() * Math.random(),
+                id: resJson.task.id,
                 title: '',
                 description: '',
                 tag: '',
                 assignee: '',
-                dueDate: '',
+                dueDate: date.toDateString(),
+                version : 1
             }
             next.push(addTask)
             setSelectedTask(addTask)
             return next
         })
     }
-    const updateTask = (id : string,field: "title" | "description" | "tag" | "dueDate" | "assignee", value: string) => {
+    const updateTask =async (id : string,field: "title" | "description" | "tag" | "dueDate" | "assignee", value: string) => {
+        console.log('selectedTask?.version' , selectedTask?.version)
+        const addRes = await fetch(`${process.env.NEXT_PUBLIC_WORKSPACE_SERVER_URL}/task/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                [field]: value,
+                version : selectedTask?.version
+            }),
+        })
+        if(!addRes.ok){
+            return alert('에러')
+        }
+        const json = await addRes.json()
         setTask((prevState) => {
             if (!id) return prevState;
             return prevState.map((task) =>
                 task.id === id
-                    ? { ...task, [field]: value }
+                    ? { ...task, [field]: value , version : json.task.version }
                     : task
             );
         });
-
         setSelectedTask(prev =>
-            prev && prev.id === id ? { ...prev, [field]: value } : prev
+            prev && prev.id === id ? { ...prev, [field]: value, version : json.task.version } : prev
         );
     };
 
