@@ -32,11 +32,10 @@ const initBlock : IBlocks ={
 }
 
 export default function CardDetailSidePeek({opened, onClose, task, boardName ,updateTask}: CardDetailSidePeekProps) {
-    const history = useRef(new History<IBlocks[]>({ limit: 50 })).current;
-
     useEffect(() => {
         // block 리스트 조회
     }, []);
+    const [history] = useState(() => new History<IBlocks[]>({ limit: 50 }));
     const [blocks, setBlocks] = useState<IBlocks[]>([initBlock]);
     const handleChange = (value: string, id: string) => {
         setBlocks((prev) => {
