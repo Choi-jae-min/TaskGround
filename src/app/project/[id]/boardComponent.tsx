@@ -4,13 +4,31 @@ import {Plus} from "lucide-react";
 import TaskCard, {BoardColumn, Task} from "@/components/cards/taskCard";
 import {moreDarkenColor, moreLightenColor} from "@/utility/utility";
 import CardDetailSidePeek from '@/components/cards/cardDetailSidePeek';
+import {useDebouncedCallback, useDebouncedState} from "@mantine/hooks";
 
 const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoardId :string,toBoardId :string, taskId:string, index : string) => void}> = ({ board,handleBoardData}) => {
-    const [task , setTask] = useState(board.task || [])
+    const [task , setTask] = useDebouncedState(board.task || [],500)
     const [taskHoverId , setTaskHoverId] = useState<string | "END" |null>(null);
     const [toBoardId , setToBoardId] = useState<string | null>(null);
     const [opened, setOpened] = useState(false);
     const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+
+    const handleSearch = useDebouncedCallback(async (id : string,field: "title" | "description" | "tag" | "dueDate" | "assignee", value: string) => {
+        const addRes = await fetch(`${process.env.NEXT_PUBLIC_WORKSPACE_SERVER_URL}/task/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                [field]: value,
+                version : selectedTask?.version
+            }),
+        })
+        if(!addRes.ok){
+            return alert('에러')
+        }
+    }, 500);
 
     const addEmptyTask = async () => {
         const date = new Date()
@@ -50,33 +68,19 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
         })
     }
     const updateTask =async (id : string,field: "title" | "description" | "tag" | "dueDate" | "assignee", value: string) => {
-        console.log('selectedTask?.version' , selectedTask?.version)
-        const addRes = await fetch(`${process.env.NEXT_PUBLIC_WORKSPACE_SERVER_URL}/task/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({
-                [field]: value,
-                version : selectedTask?.version
-            }),
-        })
-        if(!addRes.ok){
-            return alert('에러')
-        }
-        const json = await addRes.json()
         setTask((prevState) => {
             if (!id) return prevState;
             return prevState.map((task) =>
                 task.id === id
-                    ? { ...task, [field]: value , version : json.task.version }
+                    ? { ...task, [field]: value }
                     : task
             );
         });
         setSelectedTask(prev =>
-            prev && prev.id === id ? { ...prev, [field]: value, version : json.task.version } : prev
+            prev && prev.id === id ? { ...prev, [field]: value } : prev
         );
+
+        handleSearch(id, field,value);
     };
 
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
