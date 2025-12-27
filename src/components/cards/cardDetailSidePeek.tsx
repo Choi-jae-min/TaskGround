@@ -10,6 +10,7 @@ import {Task} from "@/components/cards/taskCard";
 import {formatDate} from "@/utility/utility";
 import Block, {IBlocks} from "../block";
 import {History} from "@/hooks/history";
+import {useDebouncedValue} from "@mantine/hooks";
 
 interface CardDetailSidePeekProps {
     opened: boolean;
@@ -37,6 +38,7 @@ export default function CardDetailSidePeek({opened, onClose, task, boardName ,up
     }, []);
     const [history] = useState(() => new History<IBlocks[]>({ limit: 50 }));
     const [blocks, setBlocks] = useState<IBlocks[]>([initBlock]);
+    const [debounced] = useDebouncedValue(blocks, 200);
     const handleChange = (value: string, id: string) => {
         setBlocks((prev) => {
             const next = prev.map((block) =>
@@ -160,7 +162,7 @@ export default function CardDetailSidePeek({opened, onClose, task, boardName ,up
             <Divider my="sm" label="Description" labelPosition="left" />
             <Block
                 history={history}
-                blocks={blocks}
+                blocks={debounced}
                 setBlocks={setBlocks}
                 handleChange={handleChange}
                 addBlockAfter={addBlockAfter}
