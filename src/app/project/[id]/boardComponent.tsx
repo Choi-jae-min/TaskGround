@@ -1,5 +1,5 @@
 'use client'
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Plus} from "lucide-react";
 import TaskCard, {BoardColumn, Task} from "@/components/cards/taskCard";
 import {moreDarkenColor, moreLightenColor} from "@/utility/utility";
@@ -7,12 +7,14 @@ import CardDetailSidePeek from '@/components/cards/cardDetailSidePeek';
 import {useDebouncedCallback, useDebouncedState} from "@mantine/hooks";
 
 const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoardId :string,toBoardId :string, taskId:string, index : string) => void}> = ({ board,handleBoardData}) => {
-    const [task , setTask] = useDebouncedState(board.task || [],300)
+    const [tasks , setTasks] = useDebouncedState(board.task || [],300)
     const [taskHoverId , setTaskHoverId] = useState<string | "END" |null>(null);
     const [toBoardId , setToBoardId] = useState<string | null>(null);
     const [opened, setOpened] = useState(false);
     const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-
+    useEffect(() => {
+        setTasks(board.task ?? []);
+    }, [board.task, setTasks]);
     const handleSearch = useDebouncedCallback(async (id : string,field: "title" | "description" | "tag" | "dueDate" | "assignee", value: string) => {
         const addRes = await fetch(`${process.env.NEXT_PUBLIC_WORKSPACE_SERVER_URL}/task/${id}`, {
             method: 'PUT',
@@ -54,7 +56,7 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
             return alert('에러')
         }
         const resJson = await addRes.json()
-        setTask((prevState) => {
+        setTasks((prevState) => {
             const next = [...prevState];
             const addTask:Task = {
                 id: resJson.task.id,
@@ -71,7 +73,7 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
         })
     }
     const updateTask =async (id : string,field: "title" | "description" | "tag" | "dueDate" | "assignee", value: string) => {
-        setTask((prevState) => {
+        setTasks((prevState) => {
             if (!id) return prevState;
             return prevState.map((task) =>
                 task.id === id
@@ -121,13 +123,13 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
                 />
                 <p className="text-xs font-semibold text-white">{board.name}</p>
                 <span className="text-[11px] text-gray-300">
-                    {board.task?board.task.length : 0}
+                    {board.task ? board.task.length : 0}
                 </span>
             </div>
 
             <div
                 className="pt-2 space-y-2 min-h-[20px]">
-                {task && task.map((task) => (
+                {tasks && tasks.map((task) => (
                     <div
                         onClick={() => {
                             setSelectedTask(task);

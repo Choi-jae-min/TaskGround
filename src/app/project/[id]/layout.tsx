@@ -21,7 +21,6 @@ export default async function ProjectLayout({children,params}: { children: React
         );
     }
     const project = await getProjectRes.json()
-    console.log('getProjectRes' , project)
     return (
         <ProjectProvider value={project}>
             <div className="flex h-screen bg-slate-950 text-white">

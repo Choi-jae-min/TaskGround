@@ -9,7 +9,6 @@ import ColorPicker from "@/components/cards/colorPicker";
 export default function ProjectPage() {
     const project = useProject();
     const [boardData, setBoardData] = useState(project.board)
-
     const [showBoardInput, setShowBoardInput] = useState(false);
     const [newBoardName , setNewBoardName] = useState('')
     const [colorName, setColorName] = useState("DEFAULT");
@@ -18,20 +17,20 @@ export default function ProjectPage() {
         setBoardData((prevBoards) => {
             const boards = prevBoards.map((b) => ({
                 ...b,
-                tasks: [...b.task],
+                task: [...b.task],
             }));
 
             const fromBoard = boards.find((b) => b.id === fromBoardId);
             const toBoard = boards.find((b) => b.id === toBoardId);
             if (!fromBoard || !toBoard) return prevBoards;
 
-            const fromTasks = fromBoard.tasks;
+            const fromTasks = fromBoard.task;
             const fromIndex = fromTasks.findIndex((t) => t.id === taskId);
             if (fromIndex === -1) return prevBoards;
 
             const [movedTask] = fromTasks.splice(fromIndex, 1);
 
-            const toTasks = toBoard.tasks;
+            const toTasks = toBoard.task;
 
             const insertIndex = index === "END" ? toTasks.length : toTasks.findIndex((t) => t.id === index);
             if (insertIndex === -1) return prevBoards;
@@ -41,7 +40,6 @@ export default function ProjectPage() {
             return boards;
         });
     };
-
     const handleAddBoard = async (e : React.FormEvent<HTMLFormElement>) =>{
         e.preventDefault();
 
