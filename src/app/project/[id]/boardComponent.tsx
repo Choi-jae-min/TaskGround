@@ -29,7 +29,7 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
             return alert('에러')
         }
         setSelectedTask(prev =>
-            prev && prev.id === id ? { ...prev, version : prev.version + 1 } : prev
+            prev && prev.id === id ? { ...prev, version : prev.version! + 1 } : prev
         );
     }, 500);
 

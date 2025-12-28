@@ -10,7 +10,7 @@ export type Task = {
     tag?: string;
     assignee?: string;
     dueDate?: string;
-    version : number;
+    version?: number;
 };
 
 export type BoardColumn = {
