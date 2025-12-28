@@ -1,5 +1,5 @@
 "use client";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     Drawer,
     Select,
@@ -11,6 +11,7 @@ import {formatDate} from "@/utility/utility";
 import Block, {IBlocks} from "../block";
 import {History} from "@/hooks/history";
 import {useDebouncedValue} from "@mantine/hooks";
+import { DatePicker} from "@mantine/dates";
 
 interface CardDetailSidePeekProps {
     opened: boolean;
@@ -50,7 +51,7 @@ export default function CardDetailSidePeek({opened, onClose, task, boardName ,up
             return next;
         });
     };
-
+    const [isCalOpen, setIsCalOpen] = useState(false);
 
     const addBlockAfter= (index : number) =>{
         setBlocks((prev) => {
@@ -156,7 +157,22 @@ export default function CardDetailSidePeek({opened, onClose, task, boardName ,up
 
             <span className={'flex gap-2 items-center pt-4'}>
                 <h2 className={'w-[100px] font-bold text-gray-500'}>마감일</h2>
-                <p>{task?.dueDate ? formatDate(task?.dueDate) : ''}</p>
+                <p className={`${isCalOpen ? 'hidden' : ""}`} onClick={() => {setIsCalOpen(!isCalOpen)}}>{task?.dueDate ? formatDate(task?.dueDate) : ''}</p>
+                {isCalOpen && <div className={'relative'}>
+                    <DatePicker
+                        value={task.dueDate}
+                        className={'bg-white absolute'}
+                        getDayProps={(date) => ({
+                            onClick: (e) => {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                updateTask(task.id ,'dueDate' , date || '');
+                                setIsCalOpen(!isCalOpen);
+                            },
+                        })}
+                    />
+                </div>
+                }
             </span>
 
             <Divider my="sm" label="Description" labelPosition="left" />

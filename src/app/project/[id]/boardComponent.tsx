@@ -75,7 +75,7 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
             if (!id) return prevState;
             return prevState.map((task) =>
                 task.id === id
-                    ? { ...task, [field]: value }
+                    ? { ...task, [field]: field === 'dueDate' ? new Date(value) : value }
                     : task
             );
         });
