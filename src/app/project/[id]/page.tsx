@@ -17,7 +17,7 @@ export default function ProjectPage() {
         setBoardData((prevBoards) => {
             const boards = prevBoards.map((b) => ({
                 ...b,
-                task: [...b.task],
+                task: [...b.task || []],
             }));
 
             const fromBoard = boards.find((b) => b.id === fromBoardId);
