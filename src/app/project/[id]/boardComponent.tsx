@@ -7,7 +7,7 @@ import CardDetailSidePeek from '@/components/cards/cardDetailSidePeek';
 import {useDebouncedCallback, useDebouncedState} from "@mantine/hooks";
 
 const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoardId :string,toBoardId :string, taskId:string, index : string) => void}> = ({ board,handleBoardData}) => {
-    const [task , setTask] = useDebouncedState(board.task || [],500)
+    const [task , setTask] = useDebouncedState(board.task || [],300)
     const [taskHoverId , setTaskHoverId] = useState<string | "END" |null>(null);
     const [toBoardId , setToBoardId] = useState<string | null>(null);
     const [opened, setOpened] = useState(false);
@@ -28,6 +28,9 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
         if(!addRes.ok){
             return alert('에러')
         }
+        setSelectedTask(prev =>
+            prev && prev.id === id ? { ...prev, version : prev.version + 1 } : prev
+        );
     }, 500);
 
     const addEmptyTask = async () => {
@@ -77,7 +80,7 @@ const BoardComponent:React.FC<{ board: BoardColumn , handleBoardData: (fromBoard
             );
         });
         setSelectedTask(prev =>
-            prev && prev.id === id ? { ...prev, [field]: value } : prev
+            prev && prev.id === id ? { ...prev, [field]: value} : prev
         );
 
         handleSearch(id, field,value);
