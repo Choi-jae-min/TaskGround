@@ -1,7 +1,6 @@
 'use client'
 import React, {useState} from 'react';
 import {formatDate} from "@/utility/utility";
-import {IBlocks} from "@/components/block";
 
 export type Task = {
     id: string;
