@@ -86,7 +86,7 @@ const TaskCard: React.FC<{ task: Task, color : string ,boardId:string}> = ({ tas
                 </div>
 
                 {task.assignee && (
-                    <div className="w-6 h-6 rounded-full bg-slate-500 flex items-center justify-center text-[10px] font-semibold text-white">
+                    <div className="px-2 py-0.5 rounded-full bg-slate-500 flex items-center justify-center text-[10px] font-semibold text-white">
                         {task.assignee}
                     </div>
                 )}

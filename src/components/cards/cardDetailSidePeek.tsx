@@ -12,6 +12,8 @@ import Block, {IBlocks} from "../block";
 import {History} from "@/hooks/history";
 import {useDebouncedValue} from "@mantine/hooks";
 import { DatePicker} from "@mantine/dates";
+import {useParams} from "next/navigation";
+import js from "@eslint/js";
 
 interface CardDetailSidePeekProps {
     opened: boolean;
@@ -20,6 +22,8 @@ interface CardDetailSidePeekProps {
     updateTask : (id:string ,field: "title" | "description" | "tag" | "dueDate" | "assignee", value: string) => void;
     boardName :string;
 }
+
+type SelectOption = { value: string; label: string };
 
 const tagOptions = [
     { value: "frontend", label: "Frontend" },
@@ -34,9 +38,34 @@ const initBlock : IBlocks ={
 }
 
 export default function CardDetailSidePeek({opened, onClose, task, boardName ,updateTask}: CardDetailSidePeekProps) {
+    const params = useParams();
+    const projectId = params.id as string;
+    const [memberList, setMemberList] = useState<SelectOption[]>([]);
+
+    const getMemberList = async () => {
+        const getMemberListRes = await fetch(`${process.env.NEXT_PUBLIC_WORKSPACE_SERVER_URL}/member/project/${projectId}`, {
+            method : "GET",
+            cache : 'default'
+        })
+        if(getMemberListRes.ok) {
+            const json = await getMemberListRes.json();
+            const options: SelectOption[] = json.map((m: string) => ({
+                value: m,
+                label: m,
+            }));
+            console.log('options' , options)
+            setMemberList(options);
+            return;
+        }
+    }
     useEffect(() => {
-        // block 리스트 조회
-    }, []);
+        if (!opened) return;
+        if (!projectId) return;
+
+        (async () => {
+            await getMemberList();
+        })();
+    }, [opened, projectId]);
     const [history] = useState(() => new History<IBlocks[]>({ limit: 50 }));
     const [blocks, setBlocks] = useState<IBlocks[]>([initBlock]);
     const [debounced] = useDebouncedValue(blocks, 200);
@@ -146,12 +175,15 @@ export default function CardDetailSidePeek({opened, onClose, task, boardName ,up
             <span className={'flex gap-2 items-center pt-4'}>
                 <h2 className={'w-[100px] font-bold text-gray-500'}>담당자</h2>
                 <Select
-                    data={tagOptions}
-                    value={task?.tag}
+                    data={memberList}
+                    value={task?.assignee}
                     onChange={(value) => {
-                        updateTask(task.id ,'tag' , value || '');
+                        updateTask(task.id, "assignee", value ?? "");
                     }}
                     size="xs"
+                    placeholder="담당자 선택"
+                    searchable
+                    clearable
                 />
             </span>
 
