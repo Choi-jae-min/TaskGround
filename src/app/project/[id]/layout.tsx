@@ -3,6 +3,7 @@ import Sidebar from "@/components/layout/sidebar";
 import ProjectHeader from "@/components/headers/projectHeader";
 import {redirect} from "next/navigation";
 import {ProjectProvider} from "@/app/project/[id]/BoardContext";
+import ProjectSidebar from "@/components/layout/projectSidebar";
 
 export default async function ProjectLayout({children,params}: { children: React.ReactNode; params: { id: string }; }) {
     const { id } = await params;
@@ -24,7 +25,8 @@ export default async function ProjectLayout({children,params}: { children: React
     return (
         <ProjectProvider value={project}>
             <div className="flex h-screen bg-slate-950 text-white">
-                <Sidebar />
+                {/*<Sidebar />*/}
+                <ProjectSidebar/>
                 <div className="flex flex-1 flex-col min-w-0">
                     <div className="flex-none px-6 py-6 border-b border-slate-800">
                         <ProjectHeader name={project.name} description={project.description}/>
