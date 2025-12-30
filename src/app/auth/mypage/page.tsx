@@ -11,7 +11,6 @@ import {
     Divider,
     Grid,
     Group,
-    SegmentedControl,
     Stack,
     Switch,
     Text,
@@ -19,14 +18,11 @@ import {
     Textarea,
     Title,
     Tabs,
-    Progress,
-    ActionIcon,
-    Menu,
     SimpleGrid,
     CopyButton,
     Tooltip,
 } from '@mantine/core';
-import { IconDots, IconLogout, IconCopy, IconCheck, IconKey, IconBell, IconUser } from '@tabler/icons-react';
+import { IconDots, IconCopy,IconLogout, IconCheck, IconKey, IconBell, IconUser } from '@tabler/icons-react';
 import {useRouter} from "next/navigation";
 
 type MyPageUser = {
@@ -218,7 +214,10 @@ export default function MyPage() {
                                                     onClick={() => {}}
                                                     size="xs"
                                                 >
-                                                    로그아웃
+                                                    <Text size="sm" mr={2}>
+                                                        로그아웃
+                                                    </Text>
+                                                    <IconLogout size={16} />
                                                 </Button>
                                             </Group>
                                         </Box>
@@ -344,7 +343,7 @@ export default function MyPage() {
 
                     {/* Security */}
                     <Tabs.Panel value="security" pt="lg">
-                        <Grid gutter="xl">
+                        <Grid gutter="xl" >
                             <Grid.Col span={{ base: 12, md: 7 }}>
                                 <Card withBorder radius="xl" p="lg">
                                     <SectionHeader title="비밀번호 변경" />
@@ -364,8 +363,10 @@ export default function MyPage() {
                                         <Button radius="xl">변경</Button>
                                     </Group>
                                 </Card>
+                            </Grid.Col>
 
-                                <Card withBorder radius="xl" p="lg" mt="md">
+                            <Grid.Col span={{ base: 12, md: 5 }}>
+                                <Card withBorder radius="xl" p="lg">
                                     <SectionHeader title="세션" />
                                     <Divider my="md" />
                                     <Stack gap="sm">
