@@ -31,7 +31,7 @@ const WorkSpaceHeader = ({ workspace }: Props) => {
                                       ID: <span className="font-mono">{workspace.id.slice(0, 8)}...</span>
                                     </span>
                         <span className="rounded-full bg-slate-900/70 px-3 py-1">
-                                      생성일: {formatDate(workspace.createdAt)}
+                                      생성일: {formatDate(workspace?.createdAt)}
                                     </span>
                         <span className="rounded-full bg-slate-900/70 px-3 py-1">
                                       최근 업데이트: {formatDate(workspace.updatedAt)}
