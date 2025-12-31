@@ -1,8 +1,7 @@
 import MemberForm from "@/app/workspace/[id]/members/memberForm";
 
-export default async function MembersPage({params}: { params: { id: string }}) {
+export default async function MembersPage({params}: { params: Promise<{ id: string }>}) {
     const {id} = await params;
-
     const getmemberListRes = await fetch(`${process.env.NEXT_PUBLIC_WORKSPACE_SERVER_URL}/member/workspace/${id}`)
     if (getmemberListRes.ok) {
         const memberList = await getmemberListRes.json();

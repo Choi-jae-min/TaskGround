@@ -1,11 +1,10 @@
 import React from 'react';
-import Sidebar from "@/components/layout/sidebar";
 import ProjectHeader from "@/components/headers/projectHeader";
 import {redirect} from "next/navigation";
 import {ProjectProvider} from "@/app/project/[id]/BoardContext";
 import ProjectSidebar from "@/components/layout/projectSidebar";
 
-export default async function ProjectLayout({children,params}: { children: React.ReactNode; params: { id: string }; }) {
+export default async function ProjectLayout({children,params}: { children: React.ReactNode; params: Promise<{ id: string }> }) {
     const { id } = await params;
     if( !id ) return redirect('/error')
     const getProjectRes = await fetch(`${process.env.NEXT_PUBLIC_WORKSPACE_SERVER_URL}/project/${id}`)
