@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { signAccessToken, verifyToken } from "@/lib/auth";
 
-const PUBLIC_PATHS = ["/auth/login","/auth/signup","/_next", "/favicon.ico"];
+const PUBLIC_PATHS = ["/auth/login","/auth/signup","/_next", "/favicon.ico" ,"/"];
 
 function isPublicPath(pathname: string) {
     return PUBLIC_PATHS.some((path) => pathname.startsWith(path));
