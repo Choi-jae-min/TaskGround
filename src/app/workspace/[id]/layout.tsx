@@ -4,9 +4,8 @@ import {WorkspaceProvider} from "@/app/workspace/[id]/WorkspaceContext";
 import WorkSpaceHeader from "@/components/headers/workSpaceHeader";
 import {cookies} from "next/headers";
 
-export default async function WorkspaceLayout({children,params}: { children: React.ReactNode; params: { id: string }; }) {
-    const { id } = await params;
-
+export default async function WorkspaceLayout({children,params}: { children: React.ReactNode; params: Promise<{ id: string }> }) {
+    const {id} = await params;
     const cookieStore = await cookies();
     const cookieHeader = cookieStore.toString();
 
